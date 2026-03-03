@@ -12,8 +12,10 @@ interface ProfileHeaderProps {
 
 export default function ProfileHeader({ profile, isOwnProfile, onUpdate }: ProfileHeaderProps) {
   const [uploading, setUploading] = useState(false)
+  const [uploadType, setUploadType] = useState<'avatar' | 'banner' | null>(null)
   const [editing, setEditing] = useState(false)
   const [bio, setBio] = useState(profile.bio || '')
+  const [error, setError] = useState<string | null>(null)
   const supabase = createClient()
 
   const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,17 +23,38 @@ export default function ProfileHeader({ profile, isOwnProfile, onUpdate }: Profi
     if (!file) return
 
     setUploading(true)
-    const url = await uploadFile(file, 'avatars', profile.id)
+    setUploadType('avatar')
+    setError(null)
     
-    if (url) {
-      await supabase
-        .from('profiles')
-        .update({ avatar_url: url })
-        .eq('id', profile.id)
+    console.log('Starting avatar upload...', file.name)
+
+    try {
+      const url = await uploadFile(file, 'avatars', profile.id)
       
-      onUpdate()
+      if (url) {
+        console.log('Avatar uploaded, updating profile...')
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({ avatar_url: url })
+          .eq('id', profile.id)
+        
+        if (updateError) {
+          console.error('Error updating profile:', updateError)
+          setError('Failed to update profile: ' + updateError.message)
+        } else {
+          console.log('Profile updated successfully')
+          onUpdate()
+        }
+      } else {
+        setError('Upload failed - check console for details')
+      }
+    } catch (err: any) {
+      console.error('Unexpected error:', err)
+      setError(err.message || 'Something went wrong')
+    } finally {
+      setUploading(false)
+      setUploadType(null)
     }
-    setUploading(false)
   }
 
   const handleBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,27 +62,56 @@ export default function ProfileHeader({ profile, isOwnProfile, onUpdate }: Profi
     if (!file) return
 
     setUploading(true)
-    const url = await uploadFile(file, 'banners', profile.id)
+    setUploadType('banner')
+    setError(null)
     
-    if (url) {
-      await supabase
-        .from('profiles')
-        .update({ banner_url: url })
-        .eq('id', profile.id)
+    console.log('Starting banner upload...', file.name)
+
+    try {
+      const url = await uploadFile(file, 'banners', profile.id)
       
-      onUpdate()
+      if (url) {
+        console.log('Banner uploaded, updating profile...')
+        const { error: updateError } = await supabase
+          .from('profiles')
+          .update({ banner_url: url })
+          .eq('id', profile.id)
+        
+        if (updateError) {
+          console.error('Error updating profile:', updateError)
+          setError('Failed to update profile: ' + updateError.message)
+        } else {
+          console.log('Profile updated successfully')
+          onUpdate()
+        }
+      } else {
+        setError('Upload failed - check console for details')
+      }
+    } catch (err: any) {
+      console.error('Unexpected error:', err)
+      setError(err.message || 'Something went wrong')
+    } finally {
+      setUploading(false)
+      setUploadType(null)
     }
-    setUploading(false)
   }
 
   const saveBio = async () => {
-    await supabase
-      .from('profiles')
-      .update({ bio })
-      .eq('id', profile.id)
-    
-    setEditing(false)
-    onUpdate()
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({ bio })
+        .eq('id', profile.id)
+      
+      if (error) {
+        setError(error.message)
+      } else {
+        setEditing(false)
+        onUpdate()
+      }
+    } catch (err: any) {
+      setError(err.message)
+    }
   }
 
   return (
@@ -85,7 +137,7 @@ export default function ProfileHeader({ profile, isOwnProfile, onUpdate }: Profi
               className="hidden"
               disabled={uploading}
             />
-            {uploading ? 'Uploading...' : 'Change banner'}
+            {uploading && uploadType === 'banner' ? 'Uploading...' : 'Change banner'}
           </label>
         )}
       </div>
@@ -131,6 +183,12 @@ export default function ProfileHeader({ profile, isOwnProfile, onUpdate }: Profi
               <span className="text-gray-600 text-xl">· {profile.full_name}</span>
             )}
           </div>
+          
+          {error && (
+            <div className="mt-2 text-sm text-red-600 bg-red-50 p-2 rounded-lg">
+              ⚠️ {error}
+            </div>
+          )}
           
           {editing ? (
             <div className="mt-3">
