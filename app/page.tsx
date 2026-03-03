@@ -3,6 +3,7 @@
 
 import { useState, useEffect } from 'react'
 import { createClient } from '@/utils/supabase/client'
+import Link from 'next/link'
 
 export default function Home() {
   const [email, setEmail] = useState('')
@@ -74,33 +75,35 @@ export default function Home() {
       {/* Header */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
         
-        {/* Logo og navigasjon med Login/Signup knapper */}
+        {/* Logo og navigasjon MED BILDE */}
         <nav className="flex justify-between items-center mb-16">
-          <div className="flex items-center gap-2">
-            <span className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              My Social Bomb
+          <Link href="/" className="flex items-center gap-2">
+            <img 
+              src="/logo.png" 
+              alt="My Social Bomb" 
+              className="h-8 w-auto md:h-10"
+            />
+            <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              MSB
             </span>
-            <span className="text-xs font-medium bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full">
-              Beta
-            </span>
-          </div>
+          </Link>
           
           <div className="flex items-center gap-4">
             <div className="text-sm text-gray-500 hidden sm:block">
-              🌍 {count.toLocaleString()} joined
+              💣 {count.toLocaleString()} joined
             </div>
-            <a 
+            <Link 
               href="/login" 
               className="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium"
             >
               Log in
-            </a>
-            <a 
+            </Link>
+            <Link 
               href="/signup" 
               className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
             >
               Sign up
-            </a>
+            </Link>
           </div>
         </nav>
 
@@ -108,7 +111,7 @@ export default function Home() {
         <div className="text-center mb-16 lg:mb-24">
           <div className="inline-block mb-6">
             <span className="bg-indigo-100 text-indigo-800 text-sm font-medium px-4 py-2 rounded-full">
-              ⚡️ The social platform where every follower pays you
+              💣 The social platform where every follower pays you
             </span>
           </div>
           
@@ -196,7 +199,7 @@ export default function Home() {
             <div className="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center text-3xl mb-6">
               1️⃣
             </div>
-            <h3 className="text-xl font-bold mb-3">Join & get your link</h3>
+            <h3 className="text-xl font-bold mb-3">Plant the bomb</h3>
             <p className="text-gray-600">
               Sign up for free. Get your unique invite link in seconds.
             </p>
@@ -206,7 +209,7 @@ export default function Home() {
             <div className="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center text-3xl mb-6">
               2️⃣
             </div>
-            <h3 className="text-xl font-bold mb-3">Invite your friends</h3>
+            <h3 className="text-xl font-bold mb-3">Light the fuse</h3>
             <p className="text-gray-600">
               Share your link. Friends & family join and follow you.
             </p>
@@ -216,7 +219,7 @@ export default function Home() {
             <div className="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center text-3xl mb-6">
               3️⃣
             </div>
-            <h3 className="text-xl font-bold mb-3">Earn monthly</h3>
+            <h3 className="text-xl font-bold mb-3">Watch it explode</h3>
             <p className="text-gray-600">
               Get paid $4/month for every follower. Plus team bonuses.
             </p>
@@ -235,7 +238,7 @@ export default function Home() {
               </h2>
               <p className="text-gray-300 text-lg mb-8">
                 Alex, 24, invited his classmates. They invited their friends. 
-                Now his crew pays him every month.
+                Now his network pays him every month.
               </p>
               
               <div className="space-y-4">
@@ -273,7 +276,7 @@ export default function Home() {
             
             <div className="bg-gray-800 p-8 rounded-2xl border border-gray-700">
               <div className="text-center mb-6">
-                <div className="text-5xl mb-2">🚀</div>
+                <div className="text-5xl mb-2">💣</div>
                 <div className="text-xl font-bold">Alex's Network</div>
                 <div className="text-gray-400">600 people in his network</div>
               </div>
@@ -326,10 +329,10 @@ export default function Home() {
         {/* Bunn-seksjon med ny signup */}
         <div className="text-center bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-            Join the revolution today
+            Ready to explode?
           </h2>
           <p className="text-indigo-100 text-xl mb-8">
-            Be one of the first. Get early access + founder perks.
+            Join the waitlist. Get early access + founder perks.
           </p>
           
           {!submitted ? (
@@ -357,14 +360,14 @@ export default function Home() {
           )}
           
           <p className="text-indigo-200 text-sm mt-6">
-            ✅ {count.toLocaleString()} already joined. Free forever.
+            💣 {count.toLocaleString()} already joined. Free forever.
           </p>
         </div>
 
         {/* Footer */}
         <footer className="text-center mt-16 text-gray-500 text-sm">
           <div className="flex justify-center gap-8 mb-4">
-            <span>🌍 Built for everyone</span>
+            <span>💣 Built for everyone</span>
             <span>•</span>
             <span>🇳🇴 Made in Norway</span>
             <span>•</span>
