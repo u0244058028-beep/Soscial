@@ -14,7 +14,8 @@
     "react-dom": "^18",
     "@supabase/supabase-js": "^2.39.0",
     "@supabase/ssr": "^0.1.0",
-    "@stripe/stripe-js": "^3.0.0"
+    "@stripe/stripe-js": "^3.0.0",
+    "@supabase/auth-helpers-nextjs": "^0.8.1"
   },
   "devDependencies": {
     "@types/node": "^20",
