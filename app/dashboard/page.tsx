@@ -1,3 +1,4 @@
+// app/dashboard/page.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -132,15 +133,20 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      {/* Topp navigasjon */}
+      {/* Topp navigasjon MED LOGO */}
       <nav className="bg-white border-b border-gray-200 sticky top-0 z-10 backdrop-blur-lg bg-white/80">
         <div className="max-w-6xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-8">
-              <Link href="/">
-                <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent cursor-pointer">
-                  My Social Bomb
-                </h1>
+              <Link href="/" className="flex items-center gap-2">
+                <img 
+                  src="/logo.png" 
+                  alt="My Social Bomb" 
+                  className="h-8 w-auto"
+                />
+                <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                  MSB
+                </span>
               </Link>
               
               <div className="flex gap-1">
