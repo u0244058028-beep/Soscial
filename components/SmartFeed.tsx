@@ -92,9 +92,16 @@ export default function SmartFeed({ currentUserId }: SmartFeedProps) {
           .select('profile_id')
           .in('id', likedPostIds)
 
-        // FIX: Hent ut profile_id og lag unike verdier
+        // FIX: Bruk filter for å fjerne duplikater i stedet for Set + spread
         const profileIdArray = likedProfiles?.map(p => p.profile_id) || []
-        const profileIds = [...new Set(profileIdArray)]
+        const profileIds: string[] = []
+        
+        // Manuell fjerning av duplikater (fungerer i alle TypeScript-versjoner)
+        profileIdArray.forEach(id => {
+          if (!profileIds.includes(id)) {
+            profileIds.push(id)
+          }
+        })
         
         if (profileIds.length > 0) {
           query = query
@@ -116,11 +123,12 @@ export default function SmartFeed({ currentUserId }: SmartFeedProps) {
           .eq('user_id', currentUserId)
           .eq('type', 'like')
 
-        const likedPostIdsSet = new Set(likes?.map(l => l.post_id) || [])
+        // FIX: Bruk filter i stedet for Set
+        const likedPostIdsArray = likes?.map(l => l.post_id) || []
         
         const postsWithMeta = data.map(post => ({
           ...post,
-          user_liked: likedPostIdsSet.has(post.id)
+          user_liked: likedPostIdsArray.includes(post.id)
         }))
 
         setPosts(postsWithMeta)
