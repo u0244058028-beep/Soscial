@@ -18,16 +18,21 @@ export default function Login() {
     setLoading(true)
     setError('')
 
+    console.log('Attempting login...')
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
 
     if (error) {
+      console.error('Login error:', error.message)
       setError(error.message)
       setLoading(false)
     } else {
+      console.log('Login successful, redirecting to dashboard')
       router.push('/dashboard')
+      router.refresh()
     }
   }
 
@@ -35,9 +40,11 @@ export default function Login() {
     <main className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
       <div className="max-w-md mx-auto px-4 py-20">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            My Social Bomb
-          </h1>
+          <Link href="/">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent cursor-pointer">
+              My Social Bomb
+            </h1>
+          </Link>
           <p className="text-gray-600 mt-2">Welcome back</p>
         </div>
 
@@ -80,7 +87,7 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 transition"
             >
               {loading ? 'Logging in...' : 'Log in'}
             </button>
