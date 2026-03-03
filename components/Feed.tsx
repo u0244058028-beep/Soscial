@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import { createClient } from '@/utils/supabase/client'
-import Image from 'next/image'
 import Link from 'next/link'
 
 interface Post {
@@ -12,14 +11,18 @@ interface Post {
   created_at: string
   likes_count: number
   comments_count: number
-  user_id: string
+  profile_id: string
   profiles: {
     username: string
     avatar_url: string | null
   }
 }
 
-export default function Feed() {
+interface FeedProps {
+  userId?: string  // Valgfri: viser kun poster fra en spesifikk bruker
+}
+
+export default function Feed({ userId }: FeedProps) {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const supabase = createClient()
@@ -35,7 +38,6 @@ export default function Feed() {
         schema: 'public', 
         table: 'posts' 
       }, (payload) => {
-        // Last inn hele posten med profil-data
         loadNewPost(payload.new.id)
       })
       .subscribe()
@@ -43,20 +45,27 @@ export default function Feed() {
     return () => {
       subscription.unsubscribe()
     }
-  }, [])
+  }, [userId]) // Re-run hvis userId endres
 
   const loadPosts = async () => {
-    const { data } = await supabase
+    let query = supabase
       .from('posts')
       .select(`
         *,
-        profiles:user_id (
+        profiles:profile_id (
           username,
           avatar_url
         )
       `)
       .order('created_at', { ascending: false })
       .limit(50)
+
+    // Filtrer på userId hvis den er gitt
+    if (userId) {
+      query = query.eq('profile_id', userId)
+    }
+
+    const { data } = await query
 
     if (data) {
       setPosts(data)
@@ -65,11 +74,13 @@ export default function Feed() {
   }
 
   const loadNewPost = async (postId: string) => {
+    // Bare last nye poster hvis vi ikke filtrerer på userId
+    // eller hvis posten tilhører den filtrerte brukeren
     const { data } = await supabase
       .from('posts')
       .select(`
         *,
-        profiles:user_id (
+        profiles:profile_id (
           username,
           avatar_url
         )
@@ -78,7 +89,9 @@ export default function Feed() {
       .single()
 
     if (data) {
-      setPosts(prev => [data, ...prev])
+      if (!userId || data.profile_id === userId) {
+        setPosts(prev => [data, ...prev])
+      }
     }
   }
 
@@ -179,7 +192,7 @@ export default function Feed() {
 
       {posts.length === 0 && (
         <div className="text-center py-12 text-gray-500">
-          No posts yet. Be the first to post!
+          No posts yet.
         </div>
       )}
     </div>
