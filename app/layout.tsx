@@ -1,4 +1,3 @@
-// app/layout.tsx
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
@@ -8,6 +7,10 @@ const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
   title: 'My Social Bomb - Detonate your network. Get paid.',
   description: 'Join the waitlist. Every follower pays you $4/month. Explosive growth.',
+  icons: {
+    icon: '/logo.png', // eller /favicon.ico
+    apple: '/logo.png',
+  },
 }
 
 export default function RootLayout({
