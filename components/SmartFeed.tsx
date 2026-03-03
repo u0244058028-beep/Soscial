@@ -92,7 +92,9 @@ export default function SmartFeed({ currentUserId }: SmartFeedProps) {
           .select('profile_id')
           .in('id', likedPostIds)
 
-        const profileIds = [...new Set(likedProfiles?.map(p => p.profile_id) || [])]
+        // FIX: Endret måten å lage unike profileIds på
+        const profileIdArray = likedProfiles?.map(p => p.profile_id) || []
+        const profileIds = [...new Set(profileIdArray)]
         
         if (profileIds.length > 0) {
           query = query
@@ -114,11 +116,11 @@ export default function SmartFeed({ currentUserId }: SmartFeedProps) {
           .eq('user_id', currentUserId)
           .eq('type', 'like')
 
-        const likedPostIds = new Set(likes?.map(l => l.post_id) || [])
+        const likedPostIdsSet = new Set(likes?.map(l => l.post_id) || [])
         
         const postsWithMeta = data.map(post => ({
           ...post,
-          user_liked: likedPostIds.has(post.id)
+          user_liked: likedPostIdsSet.has(post.id)
         }))
 
         setPosts(postsWithMeta)
