@@ -74,18 +74,33 @@ export default function Home() {
       {/* Header */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-20">
         
-        {/* Logo og navigasjon (enkel) */}
+        {/* Logo og navigasjon med Login/Signup knapper */}
         <nav className="flex justify-between items-center mb-16">
           <div className="flex items-center gap-2">
             <span className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-              Crew
+              My Social Bomb
             </span>
             <span className="text-xs font-medium bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full">
               Beta
             </span>
           </div>
-          <div className="text-sm text-gray-500">
-            🌍 {count.toLocaleString()} joined
+          
+          <div className="flex items-center gap-4">
+            <div className="text-sm text-gray-500 hidden sm:block">
+              🌍 {count.toLocaleString()} joined
+            </div>
+            <a 
+              href="/login" 
+              className="text-gray-600 hover:text-gray-900 px-3 py-2 text-sm font-medium"
+            >
+              Log in
+            </a>
+            <a 
+              href="/signup" 
+              className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
+            >
+              Sign up
+            </a>
           </div>
         </nav>
 
@@ -159,12 +174,12 @@ export default function Home() {
                 <div className="flex gap-2">
                   <input
                     type="text"
-                    value={`crew.vercel.app/?ref=${Math.random().toString(36).substring(2, 8)}`}
+                    value={`mysocialbomb.com/?ref=${Math.random().toString(36).substring(2, 8)}`}
                     readOnly
                     className="flex-1 px-3 py-2 bg-gray-50 rounded-lg text-sm"
                   />
                   <button
-                    onClick={() => navigator.clipboard.writeText(`crew.vercel.app/?ref=${Math.random().toString(36).substring(2, 8)}`)}
+                    onClick={() => navigator.clipboard.writeText(`mysocialbomb.com/?ref=${Math.random().toString(36).substring(2, 8)}`)}
                     className="bg-gray-200 px-4 py-2 rounded-lg text-sm hover:bg-gray-300"
                   >
                     Copy
@@ -191,7 +206,7 @@ export default function Home() {
             <div className="w-14 h-14 bg-indigo-100 rounded-xl flex items-center justify-center text-3xl mb-6">
               2️⃣
             </div>
-            <h3 className="text-xl font-bold mb-3">Invite your crew</h3>
+            <h3 className="text-xl font-bold mb-3">Invite your friends</h3>
             <p className="text-gray-600">
               Share your link. Friends & family join and follow you.
             </p>
@@ -259,7 +274,7 @@ export default function Home() {
             <div className="bg-gray-800 p-8 rounded-2xl border border-gray-700">
               <div className="text-center mb-6">
                 <div className="text-5xl mb-2">🚀</div>
-                <div className="text-xl font-bold">Alex's Crew</div>
+                <div className="text-xl font-bold">Alex's Network</div>
                 <div className="text-gray-400">600 people in his network</div>
               </div>
               <div className="space-y-3">
@@ -273,33 +288,8 @@ export default function Home() {
                 </div>
               </div>
               <p className="text-center text-sm text-gray-500 mt-6">
-                The bigger your crew, the more you earn.
+                The bigger your network, the more you earn.
               </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Designet for alle (bestemor-vennlig) */}
-        <div className="text-center mb-24">
-          <h2 className="text-3xl lg:text-4xl font-bold mb-6">
-            👵 Designed for your grandmother
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-12">
-            One button. No passwords. Big text. If she can use it, anyone can.
-          </p>
-          
-          <div className="grid sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <div className="text-3xl mb-3">🔘</div>
-              <div className="font-medium">One button</div>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <div className="text-3xl mb-3">📱</div>
-              <div className="font-medium">SMS login</div>
-            </div>
-            <div className="bg-gray-50 p-6 rounded-xl">
-              <div className="text-3xl mb-3">👆</div>
-              <div className="font-medium">Big & simple</div>
             </div>
           </div>
         </div>
@@ -336,7 +326,7 @@ export default function Home() {
         {/* Bunn-seksjon med ny signup */}
         <div className="text-center bg-gradient-to-r from-indigo-600 to-purple-600 rounded-3xl p-12">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-            Join the crew today
+            Join the revolution today
           </h2>
           <p className="text-indigo-100 text-xl mb-8">
             Be one of the first. Get early access + founder perks.
@@ -380,7 +370,7 @@ export default function Home() {
             <span>•</span>
             <span>🚀 Launching soon</span>
           </div>
-          <p>© 2024 Crew. All rights reserved.</p>
+          <p>© 2024 My Social Bomb. All rights reserved.</p>
         </footer>
       </div>
     </main>
