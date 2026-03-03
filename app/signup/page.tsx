@@ -23,6 +23,8 @@ export default function SignUp() {
     setLoading(true)
     setError('')
 
+    console.log('Attempting signup...')
+
     // 1. Opprett bruker i Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
@@ -30,12 +32,15 @@ export default function SignUp() {
     })
 
     if (authError) {
+      console.error('Auth error:', authError.message)
       setError(authError.message)
       setLoading(false)
       return
     }
 
     if (authData.user) {
+      console.log('User created, creating profile...')
+
       // 2. Opprett profil i databasen
       const inviteCode = generateInviteCode()
       
@@ -51,13 +56,16 @@ export default function SignUp() {
         ])
 
       if (profileError) {
+        console.error('Profile error:', profileError.message)
         setError('Error creating profile: ' + profileError.message)
         setLoading(false)
         return
       }
 
+      console.log('Profile created, redirecting to dashboard')
       // 3. Omdiriger til dashboard
       router.push('/dashboard')
+      router.refresh()
     }
   }
 
@@ -65,9 +73,11 @@ export default function SignUp() {
     <main className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
       <div className="max-w-md mx-auto px-4 py-20">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            My Social Bomb
-          </h1>
+          <Link href="/">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent cursor-pointer">
+              My Social Bomb
+            </h1>
+          </Link>
           <p className="text-gray-600 mt-2">Create your account</p>
         </div>
 
@@ -131,7 +141,7 @@ export default function SignUp() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50"
+              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-indigo-700 hover:to-purple-700 disabled:opacity-50 transition"
             >
               {loading ? 'Creating account...' : 'Sign up'}
             </button>
