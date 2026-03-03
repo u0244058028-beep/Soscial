@@ -28,7 +28,7 @@ export default function Home() {
     <main className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
       <div className="max-w-6xl mx-auto px-4 py-12">
         
-        {/* Enkel header */}
+        {/* Header */}
         <div className="flex justify-between items-center mb-16">
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
@@ -40,7 +40,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Hero - ren sosial media */}
+        {/* Hero */}
         <div className="text-center mb-16">
           <div className="inline-block bg-indigo-100 text-indigo-800 text-sm px-4 py-2 rounded-full mb-6">
             ⚡️ The first social platform where followers pay you
@@ -101,50 +101,53 @@ export default function Home() {
           )}
         </div>
 
-        {/* Hvordan det fungerer - som vanlig sosial media */}
+        {/* Hvordan det fungerer - MED DEN UNIKE MEKANIKKEN */}
         <div className="grid md:grid-cols-3 gap-6 mb-16">
           <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="text-3xl mb-3">1️⃣</div>
-            <h3 className="font-bold text-lg mb-2">Create your profile</h3>
-            <p className="text-gray-600 text-sm">Sign up free and get your own page.</p>
+            <h3 className="font-bold text-lg mb-2">Sign up & choose who to follow</h3>
+            <p className="text-gray-600 text-sm">
+              When you join, you pick someone to follow. Your $4/month supports them directly.
+            </p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="text-3xl mb-3">2️⃣</div>
-            <h3 className="font-bold text-lg mb-2">Post & share</h3>
-            <p className="text-gray-600 text-sm">Share updates, photos, and connect with followers.</p>
+            <h3 className="font-bold text-lg mb-2">Share your profile</h3>
+            <p className="text-gray-600 text-sm">
+              Post updates, photos, and connect. When others follow you, they support you.
+            </p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="text-3xl mb-3">3️⃣</div>
             <h3 className="font-bold text-lg mb-2">Get paid monthly</h3>
-            <p className="text-gray-600 text-sm">Each follower pays $4/month directly to you.</p>
+            <p className="text-gray-600 text-sm">
+              Every follower = $4/month. Direct deposit. No middlemen.
+            </p>
           </div>
         </div>
 
-        {/* Eksempel - helt vanlig bruker */}
+        {/* Eksempel - viser begge sider */}
         <div className="bg-gray-900 text-white rounded-2xl p-8 mb-16">
-          <div className="flex items-center gap-2 text-indigo-300 text-sm mb-4">
-            <span>📸</span> REAL CREATOR
-          </div>
-          <div className="grid md:grid-cols-2 gap-8 items-center">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Som følger */}
             <div>
-              <h3 className="text-2xl font-bold mb-4">Alex, 24 • Student</h3>
-              <p className="text-gray-300 mb-4">Posts about tech and student life. 32 followers = $128/month.</p>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">32 followers × $4:</span>
-                  <span className="font-medium">$128/month</span>
-                </div>
-                <div className="flex justify-between text-lg font-bold border-t border-gray-700 pt-2 mt-2">
-                  <span>Total monthly:</span>
-                  <span className="text-green-400">$128</span>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">More followers = more earnings. Just like any social platform, but you get paid.</p>
+              <div className="flex items-center gap-2 text-indigo-300 text-sm mb-4">
+                <span>👤</span> AS A FOLLOWER
+              </div>
+              <div className="bg-gray-800 p-6 rounded-xl">
+                <p className="mb-3">"I follow 5 creators I love. It costs me $20/month – less than Netflix. They get $16."</p>
+                <p className="text-sm text-gray-400">— Maria, 28</p>
               </div>
             </div>
-            <div className="bg-gray-800 p-6 rounded-xl text-center">
-              <div className="text-5xl mb-2">👤</div>
-              <div className="font-medium">@alex_tech</div>
-              <div className="text-sm text-gray-400">32 followers</div>
+            {/* Som skaper */}
+            <div>
+              <div className="flex items-center gap-2 text-indigo-300 text-sm mb-4">
+                <span>🎨</span> AS A CREATOR
+              </div>
+              <div className="bg-gray-800 p-6 rounded-xl">
+                <p className="mb-3">"I have 47 followers. That's $188/month for doing what I love."</p>
+                <p className="text-sm text-gray-400">— Alex, 24, student</p>
+              </div>
             </div>
           </div>
         </div>
@@ -159,7 +162,7 @@ export default function Home() {
             </div>
             <div className="bg-white p-4 rounded-lg border">
               <p className="font-medium mb-1">🤔 Do I have to pay to join?</p>
-              <p className="text-sm text-gray-600">No! It's completely free. You only earn money.</p>
+              <p className="text-sm text-gray-600">No! It's free. You only pay when you choose to follow someone.</p>
             </div>
             <div className="bg-white p-4 rounded-lg border">
               <p className="font-medium mb-1">📅 When do you launch?</p>
@@ -168,7 +171,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Footer med epost */}
+        {/* Footer */}
         <div className="text-center">
           {!submitted ? (
             <form onSubmit={async (e) => {
