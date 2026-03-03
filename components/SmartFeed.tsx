@@ -92,7 +92,7 @@ export default function SmartFeed({ currentUserId }: SmartFeedProps) {
           .select('profile_id')
           .in('id', likedPostIds)
 
-        // FIX: Endret måten å lage unike profileIds på
+        // FIX: Hent ut profile_id og lag unike verdier
         const profileIdArray = likedProfiles?.map(p => p.profile_id) || []
         const profileIds = [...new Set(profileIdArray)]
         
