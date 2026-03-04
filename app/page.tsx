@@ -24,7 +24,7 @@ export default function Home() {
   const [waitlistEntry, setWaitlistEntry] = useState<any>(null)
   
   const supabase = createClient()
-  const LAUNCH_DATE = new Date('2026-04-01T10:00:00Z') // 1. april 2026 kl 10:00 UTC
+  const LAUNCH_DATE = new Date('2026-04-01T10:00:00Z')
 
   // Hent LIVE telling fra databasen
   useEffect(() => {
@@ -65,23 +65,24 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [])
 
-  // Sjekk om bruker er logget inn (har venteliste-konto)
+  // Sjekk om bruker er logget inn
   useEffect(() => {
     const checkUser = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        setUserId(user.id)
-        
+      const waitlistLoggedIn = sessionStorage.getItem('waitlist_logged_in')
+      const waitlistEmail = sessionStorage.getItem('waitlist_user_email')
+      
+      if (waitlistLoggedIn === 'true' && waitlistEmail) {
         // Hent brukerens waitlist-entry via email
         const { data: entry } = await supabase
           .from('waitlist')
           .select('*')
-          .eq('email', user.email)
+          .eq('email', waitlistEmail)
           .single()
         
         if (entry) {
           setWaitlistEntry(entry)
           setInviteLink(`https://mysocialbomb.com/?ref=${entry.referral_code}`)
+          setUserId(entry.id)
           
           // Hent antall vervinger
           const { count: referralCount } = await supabase
@@ -109,14 +110,10 @@ export default function Home() {
       return
     }
     
-    // Generer referral code
     const referralCode = Math.random().toString(36).substring(2, 10)
-    
-    // Hent ref fra URL hvis det finnes
     const urlParams = new URLSearchParams(window.location.search)
     const referredBy = urlParams.get('ref')
     
-    // Sjekk om referrer finnes
     let referrerEmail = null
     if (referredBy) {
       const { data: referrer } = await supabase
@@ -128,7 +125,6 @@ export default function Home() {
       referrerEmail = referrer?.email
     }
     
-    // Lagre i Supabase
     const { data, error: insertError } = await supabase
       .from('waitlist')
       .insert([{ 
@@ -148,7 +144,6 @@ export default function Home() {
       }
       setLoading(false)
     } else {
-      // Send bekreftelsesepost til den nye brukeren
       try {
         await fetch('/api/send-confirmation', {
           method: 'POST',
@@ -163,10 +158,8 @@ export default function Home() {
         console.error('Failed to send confirmation email:', err)
       }
       
-      // Send varsel til referrer (hvis noen)
       if (referrerEmail) {
         try {
-          // Hent totalt antall referrals for denne referrer
           const { count } = await supabase
             .from('waitlist')
             .select('*', { count: 'exact', head: true })
@@ -191,6 +184,13 @@ export default function Home() {
       setLoading(false)
       setCount(prev => prev + 1)
     }
+  }
+
+  const handleLogout = () => {
+    sessionStorage.removeItem('waitlist_logged_in')
+    sessionStorage.removeItem('waitlist_user_email')
+    setUserId(null)
+    setWaitlistEntry(null)
   }
 
   return (
@@ -305,7 +305,15 @@ export default function Home() {
         {/* REFERRAL DASHBOARD - VISES NÅR BRUKER ER LOGGET INN */}
         {userId && waitlistEntry && (
           <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 mb-16 text-white">
-            <h2 className="text-2xl font-bold mb-4">💣 Your Referral Dashboard</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">💣 Your Referral Dashboard</h2>
+              <button
+                onClick={handleLogout}
+                className="text-white/80 hover:text-white text-sm"
+              >
+                Logout
+              </button>
+            </div>
             
             <div className="grid md:grid-cols-3 gap-6 mb-6">
               <div className="bg-white/10 backdrop-blur p-6 rounded-xl">
@@ -346,7 +354,6 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Info om lansering */}
             <div className="mt-6 bg-indigo-500/30 p-4 rounded-xl">
               <p className="text-sm">
                 🚀 <strong>On April 1st</strong>, you'll be able to create your account with <strong>{waitlistEntry.email}</strong>.
@@ -395,7 +402,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Eksempel - viser potensial */}
+        {/* Eksempel */}
         <div className="bg-gray-900 text-white rounded-2xl p-8 mb-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
