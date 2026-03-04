@@ -12,11 +12,11 @@ export default function WaitlistDashboard() {
   const [referrals, setReferrals] = useState(0)
   const [inviteLink, setInviteLink] = useState('')
   const [estimatedEarnings, setEstimatedEarnings] = useState(0)
+  const [recentReferrals, setRecentReferrals] = useState<any[]>([])
   const router = useRouter()
   const supabase = createClient()
 
   useEffect(() => {
-    // Sjekk om bruker er "logget inn" via session
     const isLoggedIn = sessionStorage.getItem('waitlist_logged_in')
     const userEmail = sessionStorage.getItem('waitlist_user_email')
     
@@ -30,7 +30,7 @@ export default function WaitlistDashboard() {
   }, [])
 
   const loadData = async (userEmail: string) => {
-    // Hent waitlist-entry
+    // Hent brukerens waitlist-entry
     const { data: entry } = await supabase
       .from('waitlist')
       .select('*')
@@ -49,6 +49,16 @@ export default function WaitlistDashboard() {
       
       setReferrals(count || 0)
       setEstimatedEarnings((count || 0) * 4)
+      
+      // Hent de 5 siste som har brukt linken
+      const { data: recent } = await supabase
+        .from('waitlist')
+        .select('email, signed_up_at')
+        .eq('referred_by', entry.referral_code)
+        .order('signed_up_at', { ascending: false })
+        .limit(5)
+      
+      setRecentReferrals(recent || [])
     }
 
     setLoading(false)
@@ -103,20 +113,20 @@ export default function WaitlistDashboard() {
 
         {/* Dashboard */}
         <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 mb-8 text-white">
-          <h2 className="text-2xl font-bold mb-2">💣 Your Waitlist Dashboard</h2>
+          <h2 className="text-2xl font-bold mb-2">💣 Your Referral Dashboard</h2>
           <p className="text-indigo-100 mb-6">{email}</p>
           
           <div className="grid md:grid-cols-3 gap-6 mb-6">
             <div className="bg-white/10 backdrop-blur p-6 rounded-xl">
-              <div className="text-sm opacity-80 mb-1">Your referrals</div>
+              <div className="text-sm opacity-80 mb-1">Total referrals</div>
               <div className="text-3xl font-bold">{referrals}</div>
             </div>
             <div className="bg-white/10 backdrop-blur p-6 rounded-xl">
-              <div className="text-sm opacity-80 mb-1">At launch you'll have</div>
-              <div className="text-3xl font-bold">{referrals} followers</div>
+              <div className="text-sm opacity-80 mb-1">Followers at launch</div>
+              <div className="text-3xl font-bold">{referrals}</div>
             </div>
             <div className="bg-white/10 backdrop-blur p-6 rounded-xl">
-              <div className="text-sm opacity-80 mb-1">Estimated monthly income</div>
+              <div className="text-sm opacity-80 mb-1">Monthly income</div>
               <div className="text-3xl font-bold">${estimatedEarnings}</div>
             </div>
           </div>
@@ -143,6 +153,23 @@ export default function WaitlistDashboard() {
           </div>
         </div>
 
+        {/* Recent referrals */}
+        {recentReferrals.length > 0 && (
+          <div className="bg-white rounded-xl p-6 border border-gray-200 mb-6">
+            <h3 className="font-bold text-lg mb-4">📋 Recent referrals</h3>
+            <div className="space-y-3">
+              {recentReferrals.map((ref, i) => (
+                <div key={i} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0">
+                  <span className="text-gray-800">{ref.email}</span>
+                  <span className="text-sm text-gray-500">
+                    {new Date(ref.signed_up_at).toLocaleDateString()}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Launch info */}
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <h3 className="font-bold text-lg mb-3">🚀 On April 1st, 2026</h3>
@@ -152,8 +179,9 @@ export default function WaitlistDashboard() {
           </p>
           <div className="bg-indigo-50 p-4 rounded-lg">
             <p className="text-sm text-indigo-800">
-              💡 <strong>Pro tip:</strong> The more people you refer now, the bigger your audience 
-              (and income) from day one!
+              💡 <strong>{referrals === 0 
+                ? 'Start sharing your link now!' 
+                : `You're doing great! Keep sharing to grow your network.`}</strong>
             </p>
           </div>
         </div>
