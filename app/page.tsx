@@ -23,7 +23,8 @@ export default function Home() {
   })
   
   const supabase = createClient()
-  const LAUNCH_DATE = new Date('2025-04-01T10:00:00Z') // 1. april 2025 kl 10:00 UTC
+  // KORRIGERT: Endret til 2026 (nåværende år)
+  const LAUNCH_DATE = new Date('2026-04-01T10:00:00Z') // 1. april 2026 kl 10:00 UTC
 
   // Hent LIVE telling fra databasen
   useEffect(() => {
@@ -88,7 +89,7 @@ export default function Home() {
             .eq('referred_by', profile.invite_code)
           
           setReferrals(referralCount || 0)
-          setEstimatedEarnings((referralCount || 0) * 4) // $4 per følger ved launch
+          setEstimatedEarnings((referralCount || 0) * 4)
         }
       }
     }
@@ -110,6 +111,10 @@ export default function Home() {
     // Generer referral code
     const referralCode = Math.random().toString(36).substring(2, 10)
     
+    // Hent ref fra URL hvis det finnes
+    const urlParams = new URLSearchParams(window.location.search)
+    const referredBy = urlParams.get('ref')
+    
     // Lagre i Supabase
     const { data, error: insertError } = await supabase
       .from('waitlist')
@@ -117,7 +122,7 @@ export default function Home() {
         email, 
         signed_up_at: new Date().toISOString(),
         referral_code: referralCode,
-        referred_by: new URLSearchParams(window.location.search).get('ref') || null
+        referred_by: referredBy
       }])
       .select()
       .single()
@@ -138,7 +143,7 @@ export default function Home() {
           body: JSON.stringify({ 
             email, 
             position: data.id,
-            referralLink: `https://mysocialbomb.com/signup?ref=${referralCode}`
+            referralLink: `https://mysocialbomb.com/?ref=${referralCode}`
           })
         })
       } catch (err) {
@@ -176,7 +181,7 @@ export default function Home() {
         {/* Hero med COUNTDOWN */}
         <div className="text-center mb-16">
           <div className="inline-block bg-indigo-100 text-indigo-800 text-sm px-4 py-2 rounded-full mb-6">
-            ⚡️ Launching April 1st, 2025
+            ⚡️ Launching April 1st, 2026
           </div>
           
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
@@ -190,7 +195,7 @@ export default function Home() {
             No ads. No algorithms. Just real people choosing to support the creators they love.
           </p>
 
-          {/* COUNTDOWN */}
+          {/* COUNTDOWN - VISES NÅ RIKTIG */}
           <div className="flex justify-center gap-4 mb-10">
             <div className="bg-white p-4 rounded-xl shadow-sm min-w-[80px]">
               <div className="text-3xl font-bold text-indigo-600">{timeLeft.days}</div>
@@ -210,7 +215,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Epost-signup */}
+          {/* Epost-signup - ALLTID SYNLIG */}
           {!submitted ? (
             <div className="max-w-md mx-auto">
               <form onSubmit={handleSubmit} className="flex gap-2">
@@ -238,7 +243,7 @@ export default function Home() {
               
               <p className="text-sm text-gray-500 mt-3 flex items-center justify-center gap-1">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                {count.toLocaleString()} people already joined. Get your referral link.
+                {count.toLocaleString()} people already joined. Get your referral link after signing up.
               </p>
             </div>
           ) : (
@@ -250,8 +255,8 @@ export default function Home() {
           )}
         </div>
 
-        {/* REFERRAL DASHBOARD (vises kun når logget inn) */}
-        {userId && (
+        {/* REFERRAL DASHBOARD - VISES KUN ETTER PÅMELDING OG INNLOGGING */}
+        {submitted && userId && (
           <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 mb-16 text-white">
             <h2 className="text-2xl font-bold mb-4">💣 Your Referral Dashboard</h2>
             
@@ -302,21 +307,21 @@ export default function Home() {
             <div className="text-3xl mb-3">1️⃣</div>
             <h3 className="font-bold text-lg mb-2">Join the waitlist</h3>
             <p className="text-gray-600 text-sm">
-              Get your personal referral link. Share it with friends.
+              Enter your email above. You'll get a personal referral link.
             </p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="text-3xl mb-3">2️⃣</div>
-            <h3 className="font-bold text-lg mb-2">They follow you</h3>
+            <h3 className="font-bold text-lg mb-2">Share your link</h3>
             <p className="text-gray-600 text-sm">
-              When friends join with your link, they automatically follow you at launch.
+              Send it to friends. When they join, they follow you at launch.
             </p>
           </div>
           <div className="bg-white p-6 rounded-xl shadow-sm border">
             <div className="text-3xl mb-3">3️⃣</div>
             <h3 className="font-bold text-lg mb-2">Earn $4/month each</h3>
             <p className="text-gray-600 text-sm">
-              Every follower = $4/month. Paid forever. Simple.
+              Every follower = $4/month. Paid forever from day one.
             </p>
           </div>
         </div>
@@ -328,8 +333,8 @@ export default function Home() {
               <div className="text-indigo-300 text-sm mb-2">📈 EXAMPLE</div>
               <h3 className="text-2xl font-bold mb-4">From 0 to $400/month</h3>
               <p className="text-gray-300 mb-6">
-                Sarah joined the waitlist in week 1. She shared her link and got 47 friends to join. 
-                At launch, she starts with 47 followers = $188/month.
+                Sarah joined the waitlist and shared her link. 47 friends joined → 
+                she starts with 47 followers = $188/month from day one.
               </p>
               <div className="space-y-3">
                 <div className="flex justify-between text-sm">
@@ -340,7 +345,7 @@ export default function Home() {
                   <div className="h-full w-3/4 bg-gradient-to-r from-indigo-500 to-purple-500"></div>
                 </div>
                 <p className="text-xs text-gray-500">
-                  The earlier you join and share, the more followers you'll have at launch.
+                  The more people you refer, the bigger your income from launch day.
                 </p>
               </div>
             </div>
@@ -353,15 +358,15 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Login-knapp for å se dashboard */}
-        {!userId && (
+        {/* Login-knapp for å se dashboard (kun etter påmelding) */}
+        {submitted && !userId && (
           <div className="text-center mb-12">
-            <p className="text-gray-600 mb-3">Already on the waitlist?</p>
+            <p className="text-gray-600 mb-3">Already signed up? Check your referrals!</p>
             <Link 
               href="/login" 
               className="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold border border-indigo-200 hover:bg-indigo-50"
             >
-              Log in to see your referrals →
+              Log in to see your dashboard →
             </Link>
           </div>
         )}
@@ -373,9 +378,9 @@ export default function Home() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
             </span>
-            {count.toLocaleString()} people on the waitlist · Launching April 1st
+            {count.toLocaleString()} people on the waitlist · Launching April 1st, 2026
           </div>
-          <p className="text-xs text-gray-400 mt-6">© 2025 My Social Bomb · Built in Norway 🇳🇴</p>
+          <p className="text-xs text-gray-400 mt-6">© 2026 My Social Bomb · Built in Norway 🇳🇴</p>
         </div>
       </div>
     </main>
