@@ -9,6 +9,7 @@ export default function Home() {
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [count, setCount] = useState(0)
+  const [onlineCount, setOnlineCount] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [userId, setUserId] = useState<string | null>(null)
@@ -41,6 +42,61 @@ export default function Home() {
     getLiveCount()
     const interval = setInterval(getLiveCount, 30000)
     return () => clearInterval(interval)
+  }, [supabase])
+
+  // ONLINE NOW - Presence tracking
+  useEffect(() => {
+    // Opprett en unik ID for denne besøkende
+    const visitorId = `visitor-${Math.random().toString(36).substring(2, 10)}`
+    
+    // Opprett en kanal for online-tracking
+    const channel = supabase.channel('online-founders', {
+      config: {
+        presence: {
+          key: visitorId,
+        },
+      },
+    })
+
+    // Funksjon for å oppdatere online count
+    const updateOnlineCount = () => {
+      const presenceState = channel.presenceState()
+      const count = Object.keys(presenceState).length
+      setOnlineCount(count)
+    }
+
+    // Lytt på join-events
+    channel.on('presence', { event: 'join' }, ({ key, newPresences }) => {
+      console.log('Join:', key, newPresences)
+      updateOnlineCount()
+    })
+
+    // Lytt på leave-events
+    channel.on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
+      console.log('Leave:', key, leftPresences)
+      updateOnlineCount()
+    })
+
+    // Koble til og track at vi er her
+    channel.subscribe(async (status) => {
+      if (status === 'SUBSCRIBED') {
+        await channel.track({
+          online_at: new Date().toISOString(),
+          user_agent: navigator.userAgent,
+        })
+        updateOnlineCount()
+      }
+    })
+
+    // Oppdater online count hvert 30. sekund (sikkerhet)
+    const interval = setInterval(updateOnlineCount, 30000)
+
+    // Rydd opp når komponenten unmountes
+    return () => {
+      clearInterval(interval)
+      channel.untrack()
+      channel.unsubscribe()
+    }
   }, [supabase])
 
   // Countdown timer
@@ -197,28 +253,42 @@ export default function Home() {
     <main className="min-h-screen bg-gradient-to-b from-indigo-50 to-white">
       <div className="max-w-6xl mx-auto px-4 py-12">
         
-        {/* Header med LIVE teller */}
-        <div className="flex justify-between items-center mb-16">
+        {/* Header med LIVE teller og ONLINE teller */}
+        <div className="flex justify-between items-center mb-16 flex-wrap gap-4">
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
               My Social Bomb
             </span>
           </div>
-          <div className="flex items-center gap-2 bg-indigo-50 px-4 py-2 rounded-full">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            <span className="text-sm font-medium text-indigo-800">
-              {count.toLocaleString()} on waitlist
-            </span>
+          <div className="flex items-center gap-3">
+            {/* Waitlist teller */}
+            <div className="flex items-center gap-2 bg-indigo-50 px-4 py-2 rounded-full">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span className="text-sm font-medium text-indigo-800">
+                {count.toLocaleString()} on waitlist
+              </span>
+            </div>
+            
+            {/* ONLINE teller - NY */}
+            <div className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+              </span>
+              <span className="text-sm font-medium text-gray-800">
+                {onlineCount} online now
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Hero med COUNTDOWN */}
         <div className="text-center mb-16">
           <div className="inline-block bg-indigo-100 text-indigo-800 text-sm px-4 py-2 rounded-full mb-6">
-            ⚡️ Launching April 1st, 2026
+            ⚡️ Launching April 1st, 2026 · {onlineCount} online now
           </div>
           
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
@@ -281,7 +351,7 @@ export default function Home() {
                 
                 <p className="text-sm text-gray-500 mt-3 flex items-center justify-center gap-1">
                   <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                  {count.toLocaleString()} people already joined. Get your referral link after signing up.
+                  {count.toLocaleString()} people already joined · {onlineCount} here now
                 </p>
               </div>
             ) : (
@@ -437,12 +507,24 @@ export default function Home() {
 
         {/* Footer */}
         <div className="text-center">
-          <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-            </span>
-            {count.toLocaleString()} people on the waitlist · Launching April 1st, 2026
+          <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              {count.toLocaleString()} on waitlist
+            </div>
+            <span>·</span>
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+              </span>
+              {onlineCount} online now
+            </div>
+            <span>·</span>
+            <span>Launching April 1st, 2026</span>
           </div>
           <p className="text-xs text-gray-400 mt-6">© 2026 My Social Bomb · Built in Norway 🇳🇴</p>
         </div>
