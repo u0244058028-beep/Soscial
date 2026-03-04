@@ -8,6 +8,14 @@ export async function middleware(req: NextRequest) {
   
   const { data: { session } } = await supabase.auth.getSession()
 
+  console.log('Middleware - Path:', req.nextUrl.pathname)
+
+  // IKKE rør /login/waitlist og /dashboard/waitlist!
+  if (req.nextUrl.pathname.startsWith('/login/waitlist') || 
+      req.nextUrl.pathname.startsWith('/dashboard/waitlist')) {
+    return res
+  }
+
   // Hvis bruker er innlogget og prøver å gå til login/signup, send til dashboard
   if (session && (req.nextUrl.pathname === '/login' || req.nextUrl.pathname === '/signup')) {
     return NextResponse.redirect(new URL('/dashboard', req.url))
@@ -23,4 +31,5 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: ['/dashboard/:path*', '/login', '/signup']
+  // MERK: /login/waitlist er IKKE inkludert her!
 }
