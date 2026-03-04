@@ -24,7 +24,7 @@ export default function Home() {
   const [waitlistEntry, setWaitlistEntry] = useState<any>(null)
   
   const supabase = createClient()
-  const LAUNCH_DATE = new Date('2026-04-01T10:00:00Z')
+  const LAUNCH_DATE = new Date('2026-04-01T10:00:00Z') // 1. april 2026 kl 10:00 UTC
 
   // Hent LIVE telling fra databasen
   useEffect(() => {
@@ -72,7 +72,7 @@ export default function Home() {
       if (user) {
         setUserId(user.id)
         
-        // Hent brukerens waitlist-entry
+        // Hent brukerens waitlist-entry via email
         const { data: entry } = await supabase
           .from('waitlist')
           .select('*')
@@ -116,6 +116,18 @@ export default function Home() {
     const urlParams = new URLSearchParams(window.location.search)
     const referredBy = urlParams.get('ref')
     
+    // Sjekk om referrer finnes
+    let referrerEmail = null
+    if (referredBy) {
+      const { data: referrer } = await supabase
+        .from('waitlist')
+        .select('email')
+        .eq('referral_code', referredBy)
+        .single()
+      
+      referrerEmail = referrer?.email
+    }
+    
     // Lagre i Supabase
     const { data, error: insertError } = await supabase
       .from('waitlist')
@@ -136,7 +148,7 @@ export default function Home() {
       }
       setLoading(false)
     } else {
-      // Send bekreftelsesepost med referral link
+      // Send bekreftelsesepost til den nye brukeren
       try {
         await fetch('/api/send-confirmation', {
           method: 'POST',
@@ -148,7 +160,31 @@ export default function Home() {
           })
         })
       } catch (err) {
-        console.error('Failed to send email:', err)
+        console.error('Failed to send confirmation email:', err)
+      }
+      
+      // Send varsel til referrer (hvis noen)
+      if (referrerEmail) {
+        try {
+          // Hent totalt antall referrals for denne referrer
+          const { count } = await supabase
+            .from('waitlist')
+            .select('*', { count: 'exact', head: true })
+            .eq('referred_by', referredBy)
+          
+          await fetch('/api/send-referral-notification', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              referrerEmail,
+              referrerName: referrerEmail.split('@')[0],
+              newReferralEmail: email,
+              totalReferrals: (count || 0) + 1
+            })
+          })
+        } catch (err) {
+          console.error('Failed to send referral notification:', err)
+        }
       }
       
       setSubmitted(true)
@@ -216,7 +252,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Epost-signup - ALLTID SYNLIG */}
+          {/* Epost-signup */}
           {!userId ? (
             !submitted ? (
               <div className="max-w-md mx-auto">
@@ -255,7 +291,7 @@ export default function Home() {
                 <p className="text-sm text-green-600 mt-1">Check your email for your personal referral link.</p>
                 <div className="mt-4">
                   <Link 
-                    href="/login" 
+                    href="/login/waitlist" 
                     className="text-indigo-600 hover:underline text-sm"
                   >
                     Already have an account? Log in to see your referrals →
@@ -277,12 +313,12 @@ export default function Home() {
                 <div className="text-3xl font-bold">{referrals}</div>
               </div>
               <div className="bg-white/10 backdrop-blur p-6 rounded-xl">
-                <div className="text-sm opacity-80 mb-1">Estimated earnings at launch</div>
-                <div className="text-3xl font-bold">${estimatedEarnings}/month</div>
+                <div className="text-sm opacity-80 mb-1">Followers at launch</div>
+                <div className="text-3xl font-bold">{referrals}</div>
               </div>
               <div className="bg-white/10 backdrop-blur p-6 rounded-xl">
-                <div className="text-sm opacity-80 mb-1">Your waitlist position</div>
-                <div className="text-3xl font-bold">#{waitlistEntry.id}</div>
+                <div className="text-sm opacity-80 mb-1">Monthly income</div>
+                <div className="text-3xl font-bold">${estimatedEarnings}</div>
               </div>
             </div>
             
@@ -326,7 +362,7 @@ export default function Home() {
           <div className="text-center mb-12">
             <p className="text-gray-600 mb-3">Already on the waitlist?</p>
             <Link 
-              href="/login" 
+              href="/login/waitlist" 
               className="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold border border-indigo-200 hover:bg-indigo-50"
             >
               Log in to see your referrals →
@@ -359,7 +395,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Eksempel */}
+        {/* Eksempel - viser potensial */}
         <div className="bg-gray-900 text-white rounded-2xl p-8 mb-16">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
