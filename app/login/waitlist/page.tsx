@@ -19,7 +19,6 @@ export default function WaitlistLogin() {
     setLoading(true)
     setError('')
 
-    // Sjekk om eposten finnes i waitlist
     const { data, error: fetchError } = await supabase
       .from('waitlist')
       .select('*')
@@ -32,18 +31,18 @@ export default function WaitlistLogin() {
       return
     }
 
-    // Generer enkel kode (i produksjon: send på epost)
-    const tempCode = Math.random().toString(36).substring(2, 8).toUpperCase()
-    
-    // Lagre kode midlertidig (i produksjon: send på epost)
-    sessionStorage.setItem('waitlist_login_code', tempCode)
-    sessionStorage.setItem('waitlist_email', email)
+    // Generer 6-sifret kode
+    const tempCode = Math.floor(100000 + Math.random() * 900000).toString()
     
     // I produksjon: send kode på epost
     console.log('Login code for', email, ':', tempCode)
     
     // For demo: vis koden (fjern i produksjon!)
     alert(`Din midlertidige kode: ${tempCode}`)
+    
+    // Lagre kode og epost (i produksjon, bruk database med TTL)
+    sessionStorage.setItem('waitlist_login_code', tempCode)
+    sessionStorage.setItem('waitlist_email', email)
     
     setStep('code')
     setLoading(false)
@@ -55,9 +54,9 @@ export default function WaitlistLogin() {
     setError('')
 
     const storedCode = sessionStorage.getItem('waitlist_login_code')
+    const storedEmail = sessionStorage.getItem('waitlist_email')
     
-    if (code === storedCode) {
-      // Login successful - lagre at bruker er "innlogget" i session
+    if (code === storedCode && email === storedEmail) {
       sessionStorage.setItem('waitlist_logged_in', 'true')
       sessionStorage.setItem('waitlist_user_email', email)
       router.push('/dashboard/waitlist')
@@ -76,7 +75,7 @@ export default function WaitlistLogin() {
               My Social Bomb
             </h1>
           </Link>
-          <p className="text-gray-600 mt-2">Access your waitlist dashboard</p>
+          <p className="text-gray-600 mt-2">Access your referral dashboard</p>
         </div>
 
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
@@ -111,7 +110,7 @@ export default function WaitlistLogin() {
               </button>
 
               <p className="text-xs text-gray-500 text-center mt-4">
-                We'll send a temporary code to your email (demo: check console)
+                We'll send a 6-digit code to your email
               </p>
             </form>
           ) : (
@@ -123,12 +122,15 @@ export default function WaitlistLogin() {
                 <input
                   type="text"
                   value={code}
-                  onChange={(e) => setCode(e.target.value.toUpperCase())}
+                  onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
                   required
                   maxLength={6}
                   className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-center text-2xl tracking-widest"
                   placeholder="••••••"
                 />
+                <p className="text-xs text-gray-500 mt-2">
+                  Code sent to {email}
+                </p>
               </div>
 
               {error && (
@@ -142,7 +144,7 @@ export default function WaitlistLogin() {
                 disabled={loading}
                 className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50"
               >
-                {loading ? 'Verifying...' : 'Verify & access dashboard'}
+                {loading ? 'Verifying...' : 'Access dashboard'}
               </button>
 
               <button
