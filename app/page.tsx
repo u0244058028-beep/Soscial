@@ -272,7 +272,7 @@ export default function Home() {
               </span>
             </div>
             
-            {/* ONLINE teller - NY */}
+            {/* ONLINE teller */}
             <div className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
@@ -370,6 +370,53 @@ export default function Home() {
               </div>
             )
           ) : null}
+        </div>
+
+        {/* 💣 HVA DETTE ERLIG TALT ER - NY SEKSJON */}
+        <div className="max-w-3xl mx-auto text-center mb-16">
+          <div className="inline-block bg-indigo-100 text-indigo-800 text-sm px-4 py-2 rounded-full mb-6">
+            💣 HONESTLY?
+          </div>
+          
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">
+            This is not another social platform.
+          </h2>
+          
+          <p className="text-lg text-gray-600 mb-8">
+            It's a <span className="font-bold text-indigo-600">creator economy reboot</span>. 
+            Where your followers aren't just numbers – they're your actual supporters.
+          </p>
+
+          <div className="grid md:grid-cols-2 gap-6 text-left">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-indigo-100">
+              <div className="text-3xl mb-3">😫</div>
+              <h3 className="font-bold text-lg mb-2">What sucks today</h3>
+              <ul className="text-gray-600 text-sm space-y-2">
+                <li>• You post, they scroll – you make $0</li>
+                <li>• Algorithms decide who sees you</li>
+                <li>• Ads pay pennies, if anything</li>
+                <li>• You're the product, not the creator</li>
+              </ul>
+            </div>
+            
+            <div className="bg-indigo-600 text-white p-6 rounded-xl shadow-sm">
+              <div className="text-3xl mb-3">💣</div>
+              <h3 className="font-bold text-lg mb-2">What we fix</h3>
+              <ul className="text-indigo-100 text-sm space-y-2">
+                <li>✓ Every follower = $4/month in your pocket</li>
+                <li>✓ No algorithms – just real people choosing you</li>
+                <li>✓ You keep 80% of what your followers pay</li>
+                <li>✓ You're the creator. You get paid.</li>
+              </ul>
+            </div>
+          </div>
+
+          <p className="text-lg text-gray-700 mt-8 font-medium">
+            It's that simple. 
+            <span className="block text-indigo-600 text-2xl font-bold mt-2">
+              Your followers finally pay you.
+            </span>
+          </p>
         </div>
 
         {/* REFERRAL DASHBOARD - VISES NÅR BRUKER ER LOGGET INN */}
