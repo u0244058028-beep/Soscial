@@ -200,6 +200,7 @@ export default function Home() {
       }
       setLoading(false)
     } else {
+      // Send bekreftelse til den nye brukeren
       try {
         await fetch('/api/send-confirmation', {
           method: 'POST',
@@ -212,6 +213,23 @@ export default function Home() {
         })
       } catch (err) {
         console.error('Failed to send confirmation email:', err)
+      }
+      
+      // 🆕 Send varsel til ADMIN (allnewufos@gmail.com)
+      try {
+        await fetch('/api/admin-notification', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            newEmail: email,
+            position: data.id,
+            referredBy: referredBy || 'direct',
+            totalCount: count + 1,
+            timestamp: new Date().toISOString()
+          })
+        })
+      } catch (err) {
+        console.error('Failed to send admin notification:', err)
       }
       
       if (referrerEmail) {
@@ -372,7 +390,7 @@ export default function Home() {
           ) : null}
         </div>
 
-        {/* 💣 HVA DETTE ERLIG TALT ER - NY SEKSJON */}
+        {/* 💣 HVA DETTE ERLIG TALT ER */}
         <div className="max-w-3xl mx-auto text-center mb-16">
           <div className="inline-block bg-indigo-100 text-indigo-800 text-sm px-4 py-2 rounded-full mb-6">
             💣 HONESTLY?
