@@ -1,9 +1,8 @@
 // components/landing/Pricing.tsx
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Check } from "lucide-react"
+import { useState } from "react";
+import { Check } from "lucide-react";
 
 const plans = [
   {
@@ -44,10 +43,10 @@ const plans = [
       "Egen strategi-workshop"
     ]
   }
-]
+];
 
 export function Pricing() {
-  const [billing, setBilling] = useState<"monthly" | "yearly">("monthly")
+  const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
   
   return (
     <section className="py-20 bg-white" id="pricing">
@@ -118,15 +117,16 @@ export function Pricing() {
                 <span className="text-gray-600"> kr/{billing === "monthly" ? "mnd" : "år"}</span>
               </div>
               
-              <Button
-                className={`w-full mb-6 ${
+              {/* Vanlig button i stedet for Button-komponent */}
+              <button
+                className={`w-full mb-6 py-2 px-4 rounded-md font-medium transition-colors ${
                   plan.popular
-                    ? "bg-purple-600 hover:bg-purple-700"
-                    : "bg-gray-900 hover:bg-gray-800"
+                    ? "bg-purple-600 hover:bg-purple-700 text-white"
+                    : "bg-gray-900 hover:bg-gray-800 text-white"
                 }`}
               >
                 Kom i gang
-              </Button>
+              </button>
               
               <ul className="space-y-3">
                 {plan.features.map((feature) => (
@@ -141,5 +141,5 @@ export function Pricing() {
         </div>
       </div>
     </section>
-  )
+  );
 }
