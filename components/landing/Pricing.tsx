@@ -8,39 +8,39 @@ const plans = [
   {
     name: "Starter",
     price: 299,
-    description: "Perfekt for små bedrifter og enkeltpersoner",
+    description: "Perfect for small businesses and individuals",
     features: [
-      "Opptil 3 sosiale medier",
-      "10 AI-genererte innlegg/mnd",
-      "Grunnleggende analyse",
+      "Up to 3 social media accounts",
+      "10 AI-generated posts/month",
+      "Basic analytics",
       "Email support"
     ]
   },
   {
     name: "Pro",
     price: 599,
-    description: "Mest populær for voksende virksomheter",
+    description: "Most popular for growing businesses",
     features: [
-      "Opptil 7 sosiale medier",
-      "50 AI-genererte innlegg/mnd",
-      "Avansert målgruppeanalyse",
-      "Automatisk publisering",
-      "Prioritert support",
-      "Ukentlige rapporter"
+      "Up to 7 social media accounts",
+      "50 AI-generated posts/month",
+      "Advanced audience analysis",
+      "Automated publishing",
+      "Priority support",
+      "Weekly reports"
     ],
     popular: true
   },
   {
     name: "Agency",
     price: 1499,
-    description: "For byråer og store merkevarer",
+    description: "For agencies and large brands",
     features: [
-      "Ubegrensede profiler",
-      "Ubegrensede AI-innlegg",
-      "White-label rapporter",
-      "API-tilgang",
-      "Dedikert account manager",
-      "Egen strategi-workshop"
+      "Unlimited profiles",
+      "Unlimited AI posts",
+      "White-label reports",
+      "API access",
+      "Dedicated account manager",
+      "Custom strategy workshop"
     ]
   }
 ];
@@ -53,16 +53,15 @@ export function Pricing() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Enkel,{" "}
+            Simple,{" "}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              forutsigbar prising
+              predictable pricing
             </span>
           </h2>
           <p className="text-xl text-gray-600">
-            Ingen skjulte kostnader. Avslutt når du vil.
+            No hidden fees. Cancel anytime.
           </p>
           
-          {/* Billing toggle */}
           <div className="flex justify-center mt-8">
             <div className="inline-flex rounded-full border border-gray-200 p-1">
               <button
@@ -73,7 +72,7 @@ export function Pricing() {
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >
-                Månedlig
+                Monthly
               </button>
               <button
                 onClick={() => setBilling("yearly")}
@@ -83,7 +82,7 @@ export function Pricing() {
                     : "text-gray-600 hover:text-gray-900"
                 }`}
               >
-                Årlig <span className="text-xs">(spar 20%)</span>
+                Yearly <span className="text-xs">(save 20%)</span>
               </button>
             </div>
           </div>
@@ -102,7 +101,7 @@ export function Pricing() {
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
                   <span className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-1 rounded-full text-sm font-medium">
-                    Mest populær
+                    Most popular
                   </span>
                 </div>
               )}
@@ -114,10 +113,9 @@ export function Pricing() {
                 <span className="text-4xl font-bold">
                   {billing === "monthly" ? plan.price : Math.floor(plan.price * 12 * 0.8)}
                 </span>
-                <span className="text-gray-600"> kr/{billing === "monthly" ? "mnd" : "år"}</span>
+                <span className="text-gray-600"> {billing === "monthly" ? "/month" : "/year"}</span>
               </div>
               
-              {/* Vanlig button i stedet for Button-komponent */}
               <button
                 className={`w-full mb-6 py-2 px-4 rounded-md font-medium transition-colors ${
                   plan.popular
@@ -125,7 +123,7 @@ export function Pricing() {
                     : "bg-gray-900 hover:bg-gray-800 text-white"
                 }`}
               >
-                Kom i gang
+                Get started
               </button>
               
               <ul className="space-y-3">
