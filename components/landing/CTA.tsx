@@ -1,8 +1,6 @@
 // components/landing/CTA.tsx
 "use client";
 
-import { ArrowRight } from "lucide-react";
-
 export function CTA() {
   return (
     <section className="py-20 bg-gradient-to-r from-purple-600 to-blue-600">
@@ -15,7 +13,6 @@ export function CTA() {
         </p>
         <button className="inline-flex items-center justify-center rounded-md bg-white text-purple-600 hover:bg-gray-100 h-12 px-8 py-3 text-base font-medium transition-colors">
           Start gratis prøveperiode
-          <ArrowRight className="ml-2 h-4 w-4" />
         </button>
         <p className="text-sm text-purple-200 mt-4">
           Ingen kredittkort kreves. Avslutt når du vil.
