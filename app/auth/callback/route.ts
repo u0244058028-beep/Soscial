@@ -5,15 +5,15 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
 
-  console.log('Callback received:', { code, url: request.url })
+  console.log('🔵 Callback route hit!', { code, url: request.url })
 
   if (code) {
     const supabase = createClient()
     const { data, error } = await supabase.auth.exchangeCodeForSession(code)
     
-    console.log('Exchange result:', { data, error })
+    console.log('🟢 Exchange result:', { data, error })
     
-    if (data.session) {
+    if (data?.session) {
       // Create profile if it doesn't exist
       const { data: existingProfile } = await supabase
         .from('profiles')
@@ -27,11 +27,11 @@ export async function GET(request: Request) {
           email: data.session.user.email,
           full_name: data.session.user.user_metadata?.full_name || data.session.user.email?.split('@')[0],
         })
-        console.log('Profile created')
+        console.log('✅ Profile created')
       }
     }
   }
 
-  // Send user to dashboard after confirmation
+  // Redirect to dashboard after confirmation
   return NextResponse.redirect(new URL('/dashboard', request.url))
 }
