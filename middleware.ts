@@ -27,12 +27,20 @@ export async function middleware(request: NextRequest) {
 
   const { data: { session } } = await supabase.auth.getSession()
 
-  // Protected routes
+  // Allow auth callback and API routes
+  if (
+    request.nextUrl.pathname === '/auth/callback' ||
+    request.nextUrl.pathname.startsWith('/api/')
+  ) {
+    return response
+  }
+
+  // Protected routes - require authentication
   if (!session && request.nextUrl.pathname.startsWith('/dashboard')) {
     return NextResponse.redirect(new URL('/auth', request.url))
   }
 
-  // Redirect to dashboard if logged in and trying to access auth
+  // Redirect to dashboard if logged in and trying to access auth page
   if (session && request.nextUrl.pathname === '/auth') {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
@@ -41,5 +49,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.jpg$).*)'],
 }
