@@ -7,8 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "MySocialBomb - AI-Powered Social Media Content Optimization",
-  description: "Get 10x more engagement on social media with AI-generated content. Analyze your audience and generate tailored content that actually works.",
-  keywords: "social media AI, content generation, social media marketing, AI tools",
+  description: "Get 10x more engagement on social media with AI-generated content.",
 };
 
 export default function RootLayout({
