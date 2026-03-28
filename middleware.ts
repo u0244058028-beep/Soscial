@@ -27,7 +27,7 @@ export async function middleware(request: NextRequest) {
 
   const { data: { session } } = await supabase.auth.getSession()
 
-  // Allow auth callback and API routes (MÅ komme FØR protected routes)
+  // Allow auth callback and API routes
   if (
     request.nextUrl.pathname === '/auth/callback' ||
     request.nextUrl.pathname.startsWith('/api/')
