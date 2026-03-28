@@ -34,13 +34,27 @@ export default function AuthPage() {
         setError(error.message)
       } else if (data.user) {
         // Create profile in database
-        await supabase.from('profiles').insert({
+        const { error: profileError } = await supabase.from('profiles').insert({
           id: data.user.id,
           email: data.user.email,
           full_name: data.user.user_metadata?.full_name || email.split('@')[0],
         })
         
-        router.push('/dashboard')
+        if (profileError) {
+          console.error('Profile creation error:', profileError)
+        }
+        
+        // Sign in automatically after sign up
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        })
+        
+        if (signInError) {
+          setError('Account created, but please sign in manually')
+        } else {
+          router.push('/dashboard')
+        }
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({
