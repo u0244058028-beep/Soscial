@@ -1,65 +1,53 @@
 // components/landing/Hero.tsx
 "use client";
 
-import { ArrowRight, Sparkles } from "lucide-react";
-import Link from "next/link";
-
 export function Hero() {
   return (
     <section className="relative overflow-hidden pt-32 pb-20 md:pt-40 md:pb-32">
-      {/* Bakgrunnseffekter */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-br from-purple-50 via-white to-blue-50" />
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-200/20 via-transparent to-transparent" />
       
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center text-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 rounded-full bg-purple-100 px-4 py-2 mb-6">
-            <Sparkles className="h-4 w-4 text-purple-600" />
+          <div className="inline-flex rounded-full bg-purple-100 px-4 py-2 mb-6">
             <span className="text-sm font-medium text-purple-600">
-              AI-drevet innholdsoptimalisering
+              AI-powered content optimization
             </span>
           </div>
           
-          {/* Hovedtittel */}
           <h1 className="max-w-4xl text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-            Få{" "}
+            Get{" "}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              10x mer engasjement
+              10x more engagement
             </span>{" "}
-            på sosiale medier med AI
+            on social media with AI
           </h1>
           
-          {/* Beskrivelse */}
           <p className="max-w-2xl text-lg md:text-xl text-gray-600 mb-8">
-            MySocialBomb analyserer din målgruppe og genererer skreddersydd innhold som faktisk fungerer. 
-            Øk følgere, engasjement og salg – alt automatisert.
+            MySocialBomb analyzes your audience and generates tailored content that actually works. 
+            Grow followers, engagement, and sales – all automated.
           </p>
           
-          {/* CTA Knapper - uten Button-komponent */}
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
             <button className="inline-flex items-center justify-center rounded-md bg-purple-600 hover:bg-purple-700 text-white h-12 px-8 py-3 text-base font-medium transition-colors">
-              Start gratis prøveperiode
-              <ArrowRight className="ml-2 h-4 w-4" />
+              Start free trial
             </button>
             <button className="inline-flex items-center justify-center rounded-md border border-purple-200 bg-transparent hover:bg-purple-50 h-12 px-8 py-3 text-base font-medium transition-colors">
-              Se demo
+              Watch demo
             </button>
           </div>
           
-          {/* Statistikk */}
           <div className="grid grid-cols-3 gap-8 max-w-2xl">
             <div>
               <div className="text-2xl md:text-3xl font-bold text-gray-900">+342%</div>
-              <div className="text-sm text-gray-500">Gjennomsnittlig engasjement</div>
+              <div className="text-sm text-gray-500">Average engagement</div>
             </div>
             <div>
               <div className="text-2xl md:text-3xl font-bold text-gray-900">10k+</div>
-              <div className="text-sm text-gray-500">Tilfredse brukere</div>
+              <div className="text-sm text-gray-500">Happy users</div>
             </div>
             <div>
               <div className="text-2xl md:text-3xl font-bold text-gray-900">4.9/5</div>
-              <div className="text-sm text-gray-500">Brukervurdering</div>
+              <div className="text-sm text-gray-500">User rating</div>
             </div>
           </div>
         </div>
