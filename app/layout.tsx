@@ -6,8 +6,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MySocialBomb - AI-drevet innholdsoptimalisering",
-  description: "Få 10x mer engasjement på sosiale medier med AI-generert innhold.",
+  title: "MySocialBomb - AI-Powered Social Media Content Optimization",
+  description: "Get 10x more engagement on social media with AI-generated content. Analyze your audience and generate tailored content that actually works.",
+  keywords: "social media AI, content generation, social media marketing, AI tools",
 };
 
 export default function RootLayout({
@@ -16,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="no">
+    <html lang="en">
       <body className={inter.className}>{children}</body>
     </html>
   );
