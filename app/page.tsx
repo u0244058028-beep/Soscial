@@ -1,15 +1,23 @@
-// app/page.tsx
+import { Hero } from "@/components/landing/Hero";
+import { Features } from "@/components/landing/Features";
+import { SocialProof } from "@/components/landing/SocialProof";
+import { HowItWorks } from "@/components/landing/HowItWorks";
+import { Pricing } from "@/components/landing/Pricing";
+import { FAQ } from "@/components/landing/FAQ";
+import { CTA } from "@/components/landing/CTA";
+import { Footer } from "@/components/landing/Footer";
+
 export default function Home() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50">
-      <div className="text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-4">
-          MySocialBomb
-        </h1>
-        <p className="text-xl text-gray-600">
-          AI-drevet innholdsoptimalisering for sosiale medier
-        </p>
-      </div>
-    </div>
+    <main className="min-h-screen">
+      <Hero />
+      <SocialProof />
+      <Features />
+      <HowItWorks />
+      <Pricing />
+      <FAQ />
+      <CTA />
+      <Footer />
+    </main>
   );
 }
