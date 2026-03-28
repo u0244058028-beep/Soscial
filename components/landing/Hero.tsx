@@ -1,9 +1,8 @@
 // components/landing/Hero.tsx
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { ArrowRight, Sparkles } from "lucide-react"
-import Link from "next/link"
+import { ArrowRight, Sparkles } from "lucide-react";
+import Link from "next/link";
 
 export function Hero() {
   return (
@@ -37,15 +36,15 @@ export function Hero() {
             Øk følgere, engasjement og salg – alt automatisert.
           </p>
           
-          {/* CTA Knapper */}
+          {/* CTA Knapper - uten Button-komponent */}
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
-            <Button size="lg" className="bg-purple-600 hover:bg-purple-700 text-white px-8">
+            <button className="inline-flex items-center justify-center rounded-md bg-purple-600 hover:bg-purple-700 text-white h-12 px-8 py-3 text-base font-medium transition-colors">
               Start gratis prøveperiode
               <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-            <Button size="lg" variant="outline" className="border-purple-200 hover:bg-purple-50">
+            </button>
+            <button className="inline-flex items-center justify-center rounded-md border border-purple-200 bg-transparent hover:bg-purple-50 h-12 px-8 py-3 text-base font-medium transition-colors">
               Se demo
-            </Button>
+            </button>
           </div>
           
           {/* Statistikk */}
@@ -66,5 +65,5 @@ export function Hero() {
         </div>
       </div>
     </section>
-  )
+  );
 }
