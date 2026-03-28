@@ -11,33 +11,33 @@ import {
 const features = [
   {
     icon: Brain,
-    title: "AI-innholdsgenerering",
-    description: "Generer engasjerende tekster, hashtags og bilder som treffer din målgruppe perfekt."
+    title: "AI Content Generation",
+    description: "Generate engaging text, hashtags, and images that perfectly target your audience."
   },
   {
     icon: Calendar,
-    title: "Smart planlegging",
-    description: "Automatisk publisering til rett tid for maksimal rekkevidde."
+    title: "Smart Scheduling",
+    description: "Automatically publish at the right time for maximum reach."
   },
   {
     icon: TrendingUp,
-    title: "Trendanalyse",
-    description: "Få innsikt i hva som fungerer i din nisje akkurat nå."
+    title: "Trend Analysis",
+    description: "Get insights into what's working in your niche right now."
   },
   {
     icon: Users,
-    title: "Målgruppeanalyse",
-    description: "Forstå dine følgere og hva de faktisk vil se."
+    title: "Audience Analysis",
+    description: "Understand your followers and what they actually want to see."
   },
   {
     icon: Clock,
-    title: "Tidsbesparelse",
-    description: "Bruk 80% mindre tid på å lage innhold."
+    title: "Time Savings",
+    description: "Spend 80% less time creating content."
   },
   {
     icon: BarChart3,
-    title: "Detaljerte rapporter",
-    description: "Følg veksten din med automatiske ukentlige rapporter."
+    title: "Detailed Reports",
+    description: "Track your growth with automated weekly reports."
   }
 ]
 
@@ -47,13 +47,13 @@ export function Features() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Alt du trenger for å lykkes på{" "}
+            Everything you need to succeed on{" "}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              sosiale medier
+              social media
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            MySocialBomb kombinerer kraftig AI med intuitivt design
+            MySocialBomb combines powerful AI with an intuitive design
           </p>
         </div>
         
