@@ -6,21 +6,22 @@ import { Check, Sparkles } from "lucide-react";
 const plans = [
   {
     name: "Starter",
-    price: 299,
-    description: "Perfect for individuals and small creators",
+    price: 49,
+    description: "Perfect for individuals and small creators starting out",
     features: [
       "3 social media accounts",
-      "30 AI posts/month",
+      "50 AI posts/month",
       "Basic analytics",
       "Email support",
       "Content calendar",
+      "Hashtag generator",
     ],
     cta: "Start free trial",
   },
   {
     name: "Pro",
-    price: 599,
-    description: "Most popular for growing businesses",
+    price: 99,
+    description: "Most popular for growing businesses and creators",
     features: [
       "10 social media accounts",
       "Unlimited AI posts",
@@ -29,13 +30,14 @@ const plans = [
       "Priority support",
       "Weekly strategy reports",
       "Trend alerts",
+      "Image generation",
     ],
     popular: true,
     cta: "Start free trial",
   },
   {
     name: "Agency",
-    price: 1499,
+    price: 249,
     description: "For agencies and large brands",
     features: [
       "Unlimited accounts",
@@ -43,8 +45,9 @@ const plans = [
       "API access",
       "Dedicated account manager",
       "Custom AI training",
-      "Team collaboration",
+      "Team collaboration (5+ seats)",
       "SLA guarantee",
+      "Custom integrations",
     ],
     cta: "Contact sales",
   },
@@ -58,6 +61,11 @@ export function Pricing() {
     return Math.floor(price * 12 * 0.8); // 20% discount for yearly
   };
   
+  const getYearlyPrice = (price: number) => {
+    if (billing === "yearly") return Math.floor(price * 12 * 0.8);
+    return price * 12;
+  };
+  
   return (
     <section className="py-24 bg-gray-50" id="pricing">
       <div className="container mx-auto px-4">
@@ -65,17 +73,17 @@ export function Pricing() {
           <div className="inline-flex items-center gap-2 rounded-full bg-purple-100 px-4 py-2 mb-6">
             <Sparkles className="h-4 w-4 text-purple-600" />
             <span className="text-sm font-medium text-purple-600">
-              Simple Pricing
+              Simple, Transparent Pricing
             </span>
           </div>
           <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            Choose the plan that's{" "}
+            Start growing today for{" "}
             <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-              right for you
+              less than a coffee
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Start free. No credit card required. Upgrade anytime.
+            Get started with a 14-day free trial. No credit card required.
           </p>
           
           {/* Billing toggle */}
@@ -129,6 +137,11 @@ export function Pricing() {
               <div className="mb-6">
                 <span className="text-5xl font-bold">${getPrice(plan.price)}</span>
                 <span className="text-gray-500 ml-2">/{billing === "monthly" ? "month" : "year"}</span>
+                {billing === "yearly" && (
+                  <div className="text-sm text-green-600 mt-1">
+                    Save ${(plan.price * 12) - getYearlyPrice(plan.price)}/year
+                  </div>
+                )}
               </div>
               
               <button
@@ -153,9 +166,14 @@ export function Pricing() {
           ))}
         </div>
         
-        <p className="text-center text-gray-500 text-sm mt-12">
-          All plans include a 14-day free trial. No credit card required to start.
-        </p>
+        <div className="text-center mt-12">
+          <p className="text-gray-500 text-sm mb-2">
+            ✨ All plans include a 14-day free trial. No credit card required.
+          </p>
+          <p className="text-gray-400 text-xs">
+            Need a custom plan? <a href="#" className="text-purple-600 hover:underline">Contact our sales team</a>
+          </p>
+        </div>
       </div>
     </section>
   );
