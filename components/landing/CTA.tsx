@@ -1,6 +1,8 @@
 // components/landing/CTA.tsx
-import { Button } from "@/components/ui/button"
-import { ArrowRight } from "lucide-react"
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 export function CTA() {
   return (
@@ -21,5 +23,5 @@ export function CTA() {
         </p>
       </div>
     </section>
-  )
+  );
 }
