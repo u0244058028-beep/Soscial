@@ -49,6 +49,6 @@ export function Footer() {
           <p className="mt-2">© 2024 MySocialBomb. All rights reserved.</p>
         </div>
       </div>
-    </section>
+    </footer>
   );
 }
